@@ -1,0 +1,66 @@
+{
+  // ===========================
+  // 🔧 Pyright Configuration
+  // ===========================
+
+  // The root folders Pyright should analyze
+  "include": ["src", "tests", "."],
+
+  // Paths to ignore (build artifacts, caches, venvs, etc.)
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    ".venv",
+    "venv",
+    "build",
+    "dist"
+  ],
+
+  // Extra module lookup paths (for local libs or custom dirs)
+  "extraPaths": [
+    "./src",
+    "./libs",
+    "./app"
+  ],
+
+  // Virtual environment configuration
+  // venvPath: parent directory of your environment
+  // venv: folder name of the environment inside venvPath
+  "venvPath": ".",
+  "venv": "venv",
+
+  // ===========================
+  // 🧠 Type Checking Behavior
+  // ===========================
+
+  // "off" | "basic" | "strict"
+  "typeCheckingMode": "basic",
+
+  // Whether to analyze unopened files in the workspace
+  "useLibraryCodeForTypes": true,
+
+  // Enable/disable various diagnostic reports
+  "reportMissingImports": true,
+  "reportMissingTypeStubs": false,
+  "reportUnusedImport": "warning",
+  "reportUnusedVariable": "warning",
+  "reportPrivateUsage": "none",
+  "reportOptionalSubscript": "none",
+  "reportOptionalMemberAccess": "none",
+  "reportOptionalCall": "none",
+
+  // ===========================
+  // 🧩 Miscellaneous
+  // ===========================
+
+  // Define custom type stub paths if you use pyright-stub files
+  "stubPath": "typings",
+
+  // Set the default Python version (important for 3.13+)
+  "pythonVersion": "3.13",
+
+  // You can enable/disable source maps or debug logs if needed
+  "verboseOutput": false
+}
+
+

@@ -1,0 +1,89 @@
+# -----------------------------
+# Python
+# -----------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+
+# C extensions
+*.so
+
+# Virtual environments
+venv/
+.env/
+.env*/
+.venv*/
+python_env/
+pip-wheel-metadata/
+
+# Django / Flask / FastAPI stuff
+*.log
+local_settings.py
+instance/
+.webassets-cache
+db.sqlite3
+db.sqlite3-journal
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+.jupyter/
+
+# Unit test / coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.coverage
+.cache/
+pytest_cache/
+pytestdebug.log
+
+# Packaging / distribution
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# MyPy / Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pylint
+pylint.log
+
+# Static analysis
+.bandit
+
+# IDEs
+.vscode/
+.settings/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Byte-compiled or backup files
+*~
+*.bak
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.envrc
+.env.local
+.env.development
+.env.production
+.env.test
