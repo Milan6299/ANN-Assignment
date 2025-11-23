@@ -57,7 +57,8 @@ print(calc_z(rowdata))
 #Training Phase
 def mlpbp(x):
     data = x.iloc[:, 0:tsinputsize].to_numpy()
-    lr = 0.01  # learning rate
+    #learning rate
+    lr = 0.01
     for epoch in range(1000):
         for i in range(data.shape[0]):  # loop over all samples
             rowdata = data[i, :]  # current sample
