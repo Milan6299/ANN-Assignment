@@ -37,13 +37,10 @@ limit = xav_uniform(tsinputsize)
 
 W = np.random.uniform(-limit, limit, (tsinputsize,neurons))
 V = np.random.uniform(-limit, limit, (neurons))
-Ycap = ts.iloc[:,tsinputsize].to_numpy()
-print(Ycap)
-delta = []
-rowdata = ts.iloc[0,0:tsinputsize].to_numpy()
+Ycap = df.iloc[:,tsinputsize].to_numpy()
+# print(Ycap)
 
-print(rowdata)
-
+print(W)
 def calc_z(x):
     z = []  # store neuron sums
     for i in range(neurons):  # for each neuron
@@ -52,13 +49,11 @@ def calc_z(x):
             sum_val += x[j] * W[j, i]
         z.append(sum_val)  # append sum for this neuron
     return z
-
-print(calc_z(rowdata))
 #Training Phase
 def mlpbp(x):
     data = x.iloc[:, 0:tsinputsize].to_numpy()
     #learning rate
-    lr = 0.01
+    lr = 0.1
     for epoch in range(1000):
         for i in range(data.shape[0]):  # loop over all samples
             rowdata = data[i, :]  # current sample
@@ -85,14 +80,42 @@ def mlpbp(x):
             #Calculate hidden layer deltas
             delta = []
             for n in range(neurons):
-                delta.append(A[n] * (1 - A[n]) * V[n])
+                delta.append(A[n] * (1 - A[n]) * V[n] * sigma)
 
             #Update output weights V
             for n in range(neurons):
                 V[n] -= lr * sigma * A[n]
 
             #Update Weights in the input to hidden layer
-
             for n in range(neurons):
                 for k in range(tsinputsize):
-                    W[k, n] -= lr * delta[n] * sigma * rowdata[k]
+                    W[k, n] -= lr * delta[n] * rowdata[k]
+
+
+def testing(test):
+    data = test.iloc[:,0:tsinputsize].to_numpy()
+    for i in range(data.shape[0]):  # loop over all samples
+        rowdata = data[i, :]  # current sample
+
+        #Forward pass: calculate Z and A
+        Z = []
+        A = []
+        for n in range(neurons):
+            sum_val = 0
+            for k in range(tsinputsize):
+                sum_val += rowdata[k] * W[k, n]
+            Z.append(sum_val)
+            A.append(sigmoid(sum_val))
+
+        #Forward pass: calculate Yin and Ycal
+        Yin = 0
+        for n in range(neurons):
+            Yin += A[n] * V[n]
+        Ycal = sigmoid(Yin)
+
+        print('Calculated Class:',Ycal,'Actual:',Ycap[800+i])
+
+mlpbp(ts)
+print(W)
+test = df.iloc[800:,0:tsinputsize]
+# testing(test)
