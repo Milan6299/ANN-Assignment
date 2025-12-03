@@ -13,7 +13,7 @@ data, meta = arff.loadarff("vehicle_clean.arff")
 df = pd.DataFrame(data)
 print(df.head())
 
-# Convert class from bytes → string and map to 0/1
+# Convert class from bytes to string and map to 0/1
 df["Class"] = (
     df["Class"].str.decode("utf-8").str.strip().map({"positive": 1, "negative": 0})
 )
@@ -29,8 +29,8 @@ CL = df["Class"]
 
 # Z-Score Normalization - in order to make the mean 0 and std 1
 TR = (TR - TR.mean()) / TR.std()
-print(TR.head())
-# Used stratified random sampling to make sure the tr_set contains
+print("TR", TR)
+# Used stratified random sampling to split data keeping the ratio of class 0 to 1 constant
 TR_train, TR_test, CL_train, CL_test = train_test_split(
     TR, CL, test_size=0.25, shuffle=True, stratify=CL, random_state=42
 )
@@ -38,7 +38,7 @@ TR_train, TR_test, CL_train, CL_test = train_test_split(
 TRCL = pd.concat(
     [TR_train.reset_index(drop=True), CL_train.reset_index(drop=True)], axis=1
 )
-print(TRCL)
+print("TRCL", TRCL)
 trclsize = len(TRCL)
 class0 = (TRCL["Class"] == 0).sum()
 class1 = trclsize - class0
@@ -66,18 +66,19 @@ TRCL_balanced = TRCL_balanced.sample(frac=1, random_state=42).reset_index(drop=T
 # Check counts after undersampling
 print(TRCL_balanced["Class"].value_counts())
 TRB = TRCL_balanced.iloc[:, :-1]
+Ycap = TRCL_balanced.iloc[:, -1].values.reshape(-1, 1)
 print(TRB)
-
+print(Ycap)
 
 input_size = TRB.shape[1]
 hidden_neurons = 4
 alpha = 0.1
-epochs = 10000
+epochs = 1000
 
 
 # Activation Functions
 def sigmoid(x):
-    return 1 / (1 + np.exp(x))
+    return 1 / (1 + np.exp(-x))
 
 
 # Xavier Initialization
@@ -98,18 +99,47 @@ V = np.random.uniform(
 )
 b_output = np.zeros((1, 1))
 
-print(W)
+# print(W)
 
-# Initialization of Ycap and extracting class values
+# Initialization of Error Matrix
+E = np.zeros((epochs, 1))
 
-# Training Phase
-for i in range(epochs):
-    Z = TRB @ W + b_hidden
-    A = sigmoid(Z)
-    Yin = A @ V + b_output
-    Y = sigmoid(Yin)
+for e in range(1):
+    total_err = 0
 
+    for i in range(len(TRB)):
+        # Extract sample and row by row (Stochastic Method)
+        Xi = TRB.iloc[i].values.reshape(1, -1)  # shape (1, 18)
+        Yci = Ycap[i].reshape(1, 1)  # shape (1, 1)
 
+        # Forward Pass
+        Z = Xi @ W + b_hidden  # shape(1,4)
+        # print(i, Z)
+        A = sigmoid(Z)
+        Yin = A @ V + b_output
+        Y = sigmoid(Yin)
+
+        # Error for this row
+        err = Yci - Y
+        total_err += err**2
+
+        # Backpropagation
+        dYin = Y * (1 - Y) * err  # output layer delta - shape(1,1)
+        dV = A.T @ dYin  # shape (1,4)
+        db_output = dYin  # shape (1,1)
+
+        dZ = (dYin @ V.T) * (A * (1 - A))  # hidden layer delta - shape(4,1)
+        dW = Xi.T @ dZ  # shape (18,4)
+        db_hidden = dZ  # shape (4,1)
+
+        # Weight Updates
+        W += alpha * dW  # shape (18,4)
+        b_hidden += alpha * db_hidden  # shape (18,4)
+        V += alpha * dV  # shape (1,4)
+        b_output += alpha * db_output  # shape (1,1)
+
+    # MSE(Mean Squared Error) for each epoch
+    E[e] = np.mean(total_err)
 # Comparison of data before and after undersampling
 # sns.countplot(x="Class", data=TRCL)
 # plt.show()
