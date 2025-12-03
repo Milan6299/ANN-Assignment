@@ -67,6 +67,38 @@ TRCL_balanced = TRCL_balanced.sample(frac=1, random_state=42).reset_index(drop=T
 print(TRCL_balanced["Class"].value_counts())
 TRB = TRCL_balanced.iloc[:, :-1]
 print(TRB)
+
+
+input_size = TRB.shape[1]
+hidden_neurons = 4
+alpha = 0.1
+epochs = 10000
+
+# Activation Functions
+def sigmoid(x):
+    return 1 / (1 + np.exp(-np.clip(x, -500, 500)))
+
+# Xavier Initialization
+def xav_uniform(fan_in, fan_out):
+    return np.sqrt(6 / (fan_in + fan_out))
+
+# Intitializing weights and bias
+W = np.random.uniform(-xav_uniform(input_size, hidden_neurons),
+                      xav_uniform(input_size, hidden_neurons),
+                      (input_size, hidden_neurons))
+b_hidden = np.zeros((1, hidden_neurons))
+
+V = np.random.uniform(-xav_uniform(hidden_neurons,1),
+                      xav_uniform(hidden_neurons,1),
+                      (hidden_neurons,1))
+b_output = np.zeros((1,1))
+
+
+# Training Phase
+for i in range(epochs):
+
+
+
 # Comparison of data before and after undersampling
 # sns.countplot(x="Class", data=TRCL)
 # plt.show()
