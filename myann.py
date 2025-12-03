@@ -74,29 +74,40 @@ hidden_neurons = 4
 alpha = 0.1
 epochs = 10000
 
+
 # Activation Functions
 def sigmoid(x):
-    return 1 / (1 + np.exp(-np.clip(x, -500, 500)))
+    return 1 / (1 + np.exp(x))
+
 
 # Xavier Initialization
-def xav_uniform(fan_in, fan_out):
-    return np.sqrt(6 / (fan_in + fan_out))
+def xav_uniform(rows, columns):
+    return np.sqrt(6 / (rows + columns))
+
 
 # Intitializing weights and bias
-W = np.random.uniform(-xav_uniform(input_size, hidden_neurons),
-                      xav_uniform(input_size, hidden_neurons),
-                      (input_size, hidden_neurons))
+W = np.random.uniform(
+    -xav_uniform(input_size, hidden_neurons),
+    xav_uniform(input_size, hidden_neurons),
+    (input_size, hidden_neurons),
+)
 b_hidden = np.zeros((1, hidden_neurons))
 
-V = np.random.uniform(-xav_uniform(hidden_neurons,1),
-                      xav_uniform(hidden_neurons,1),
-                      (hidden_neurons,1))
-b_output = np.zeros((1,1))
+V = np.random.uniform(
+    -xav_uniform(hidden_neurons, 1), xav_uniform(hidden_neurons, 1), (hidden_neurons, 1)
+)
+b_output = np.zeros((1, 1))
 
+print(W)
+
+# Initialization of Ycap and extracting class values
 
 # Training Phase
 for i in range(epochs):
-
+    Z = TRB @ W + b_hidden
+    A = sigmoid(Z)
+    Yin = A @ V + b_output
+    Y = sigmoid(Yin)
 
 
 # Comparison of data before and after undersampling
