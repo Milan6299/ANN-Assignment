@@ -124,7 +124,7 @@ for e in range(1):
         total_err += err**2
 
         # Backpropagation
-        dYin = Y * (1 - Y) * err  # output layer delta - shape(1,1)
+        dYin = Y * (1 - Y) * err * (-1)  # output layer delta - shape(1,1)
         dV = A.T @ dYin  # shape (1,4)
         db_output = dYin  # shape (1,1)
 
@@ -133,9 +133,9 @@ for e in range(1):
         db_hidden = dZ  # shape (4,1)
 
         # Weight Updates
-        W += alpha * dW  # shape (18,4)
-        b_hidden += alpha * db_hidden  # shape (18,4)
-        V += alpha * dV  # shape (1,4)
+        W -= alpha * dW  # shape (18,4)
+        b_hidden += alpha * db_hidden  # shape (1,4)
+        V -= alpha * dV  # shape (1,4)
         b_output += alpha * db_output  # shape (1,1)
 
     # MSE(Mean Squared Error) for each epoch
