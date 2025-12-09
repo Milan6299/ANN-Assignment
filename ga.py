@@ -1,7 +1,6 @@
 """
 Neuroevolution: Evolve ANN architecture + weights with a Genetic Algorithm
 Dataset: car-vgood.txt (ARFF-like). Place file in same directory or update DATA_PATH.
-Author: ChatGPT
 Notes:
  - Fitness = validation F1-score (macro). Suitable for imbalanced classes.
  - Genotype: [arch_genes | weight_genes]
@@ -33,7 +32,7 @@ DATA_PATH = "car-vgood.dat"
 RANDOM_SEED = 1
 
 POP_SIZE = 120
-N_GENERATIONS = 220
+N_GENERATIONS = 200
 TOURNAMENT_K = 3
 CROSSOVER_RATE = 0.9
 
